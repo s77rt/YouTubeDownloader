@@ -45,7 +45,6 @@ func DownloadVideo(ctx context.Context, tmpdir string, extractor E.Extractor, do
 	var progress_2 *D.Progress
 
 	if url_1 != "" && url_2 == "" {
-		// Video + Audio (one file)
 		progress_1 = &D.Progress{TimeUnit: timeunit}
 		progress_2 = progress_1
 
@@ -84,7 +83,7 @@ func DownloadVideo(ctx context.Context, tmpdir string, extractor E.Extractor, do
 		}
 		defer file.Close()
 
-		err = os.Rename(file_1.Name(), file.Name())
+		err = MoveFile(file_1.Name(), file.Name())
 		if err != nil {
 			return "", err
 		}
@@ -92,7 +91,6 @@ func DownloadVideo(ctx context.Context, tmpdir string, extractor E.Extractor, do
 		return file.Name(), nil
 
 	} else if url_1 != "" && url_2 != "" {
-		// Video + Audio (separated)
 		progress_1 = &D.Progress{TimeUnit: timeunit}
 		progress_2 = &D.Progress{TimeUnit: timeunit}
 

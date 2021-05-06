@@ -9,11 +9,13 @@ import (
 // Rely on hardcoded canonical mime types, as the ones provided by Go aren't exhaustive [1].
 // This seems to be a recurring problem for youtube downloaders, see [2].
 // The implementation is based on mozilla's list [3], IANA [4] and Youtube's support [5].
+// Edit: added audio formats [6]
 // [1] https://github.com/golang/go/blob/ed7888aea6021e25b0ea58bcad3f26da2b139432/src/mime/type.go#L60
 // [2] https://github.com/ZiTAL/youtube-dl/blob/master/mime.types
 // [3] https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
 // [4] https://www.iana.org/assignments/media-types/media-types.xhtml#video
 // [5] https://support.google.com/youtube/troubleshooter/2888402?hl=en
+// [6] https://github.com/rello/audioplayer/wiki/audio-files-and-mime-types
 var canonicals = map[string]string{
 	"video/quicktime":  ".mov",
 	"video/x-msvideo":  ".avi",
@@ -26,6 +28,17 @@ var canonicals = map[string]string{
 	"video/mp4":        ".mp4",
 	"video/ogg":        ".ogv",
 	"video/mp2t":       ".ts",
+
+	"audio/flac":       ".flac",
+	"audio/mpegurl":    ".m3u8",
+	"audio/mp4":        ".m4a",
+	"audio/mpeg":       ".mp3",
+	"audio/ogg":        ".opus",
+	"audio/x-scpls":    ".pls",
+	"audio/wav":        ".wav",
+	"audio/aac":        ".aac",
+	"audio/webm":       ".webm",
+	"audio/x-ms-wma":   ".wma",
 }
 
 func pickIdealFileExtension(mediaType string) string {

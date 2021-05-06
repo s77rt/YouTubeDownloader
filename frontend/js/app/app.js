@@ -105,13 +105,18 @@ function add_video(video_obj) {
 	for (var i = 0; i < video_obj.Formats.length; i++) {
 		let format_obj = video_obj.Formats[i];
 
+		if (format_obj.mimeType.startsWith("audio/"))
+			format_obj.qualityLabel = "Audio"
+
 		if (format_obj.qualityLabel == "")
 			continue;
 
-		if (added_formats.includes(format_obj.qualityLabel))
+		if (added_formats.find(f => f.qualityLabel === format_obj.qualityLabel))
 			continue;
 
-		if (format_obj.height > 1080) {
+		if (format_obj.height == 0) {
+			format_btn_style = "btn-outline-secondary";
+		} else if (format_obj.height > 1080) {
 			format_btn_style = "btn-success";
 		} else if (format_obj.height >= 720) {
 			format_btn_style = "btn-danger";
@@ -135,7 +140,7 @@ function add_video(video_obj) {
 
 		formats.append(format);
 
-		added_formats.push(format_obj.qualityLabel);
+		added_formats.push(format_obj);
 	}
 
 	video.querySelector('[data-role=download]').addEventListener('click', function() {
@@ -180,8 +185,7 @@ function add_video(video_obj) {
 
 	update_video_status(video_uuid, "idle");
 
-	if (video_obj.Formats.length > 0)
-		w_GetExistingVideo(video_uuid, video_obj, video_obj.Formats[0])
+	w_GetExistingVideo(video_uuid, video_obj, added_formats);
 
 	onDBinsert();
 }
@@ -287,28 +291,28 @@ function update_video_progress(video_uuid, progress_1_obj, progress_2_obj) {
 	}
 
 	if (progress_1_obj.Size == 0 || progress_1_obj.Transferred != progress_1_obj.Size) {
-		// Step1: Downloading Video
+		// Step1: Downloading Part1
 		percentage = local_percentage(
 			0,
 			progress_1_obj.Transferred,
 			progress_1_obj.Size,
 			coefficients.DownloadingVideo
 		).toFixed(2);
-		percentage_text = "1/3 Downloading Video" + " (" + percentage + "%)";
+		percentage_text = "1/3 Downloading Part1" + " (" + percentage + "%)";
 		percentage_animated = false;
-		status_text = "1/3 Downloading Video" + " (" + percentage + "%)";
+		status_text = "1/3 Downloading Part1" + " (" + percentage + "%)";
 		speed = humanFileSize((progress_1_obj.Speed)/(progress_1_obj.TimeUnit*nano))+"/s";
 	} else if (progress_2_obj.Size == 0 || progress_2_obj.Transferred != progress_2_obj.Size) {
-		// Step2: Downloading Audio
+		// Step2: Downloading Part2
 		percentage = local_percentage(
 			coefficients.DownloadingVideo,
 			progress_2_obj.Transferred,
 			progress_2_obj.Size,
 			coefficients.DownloadingAudio
 		).toFixed(2);
-		percentage_text = "2/3 Downloading Audio" + " (" + percentage + "%)";
+		percentage_text = "2/3 Downloading Part2" + " (" + percentage + "%)";
 		percentage_animated = false;
-		status_text = "2/3 Downloading Audio" + " (" + percentage + "%)";
+		status_text = "2/3 Downloading Part2" + " (" + percentage + "%)";
 		speed = humanFileSize((progress_2_obj.Speed)/(progress_2_obj.TimeUnit*nano))+"/s";
 	} else if (progress_1_obj.Transferred == progress_1_obj.Size && progress_2_obj.Transferred == progress_2_obj.Size) {
 		// Step3: Merging
@@ -380,12 +384,19 @@ function video_newAlert(video_uuid, origin, msg) {
 	var error_box = video.querySelector('[data-role=error_box]');
 
 	var alert = document.createElement("div");
-	alert.classList.value = "alert alert-danger";
+	alert.classList.value = "alert alert-danger alert-dismissible fade show";
 
 	var alert_msg = document.createElement("div");
 	alert_msg.innerHTML = '<strong><i class="bi-exclamation-circle-fill"></i> '+origin+'</strong> '+msg;
 
+	var close_btn = document.createElement("button");
+	close_btn.classList.value = "btn-close";
+	close_btn.setAttribute("type", "button");
+	close_btn.setAttribute("data-bs-dismiss", "alert");
+	close_btn.setAttribute("aria-label", "Close");
+
 	alert.appendChild(alert_msg);
+	alert.appendChild(close_btn);
 
 	error_box.replaceChildren(alert);
 }
@@ -396,6 +407,16 @@ function video_clearAlert(video_uuid) {
 	var error_box = video.querySelector('[data-role=error_box]');
 
 	error_box.replaceChildren();
+}
+
+////////////////////////////////////////////////////////////////
+
+function w_CheckFFmpeg() {
+	CheckFFmpeg();
+}
+
+function w_CheckFFmpeg__onerror(error) {
+	newAlert("FFmpeg", error);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -416,13 +437,13 @@ function w_GetVideos__onerror(error) {
 	newAlert("GetVideos", error);
 }
 
-function w_GetExistingVideo(video_uuid, video_obj, format_obj) {
+function w_GetExistingVideo(video_uuid, video_obj, format_objs) {
 	if (DB.Videos[video_uuid].status != "idle")
 		return
 
 	update_video_status(video_uuid, "fetching");
 
-	GetExistingVideo(video_uuid, video_obj, format_obj);
+	GetExistingVideo(video_uuid, video_obj, format_objs);
 }
 function w_GetExistingVideo__onerror(video_uuid, error) {
 	if (error != "not available")

@@ -6,8 +6,20 @@ import (
 	"fmt"
 )
 
+func FFmpeg_exists() bool {
+	cmd := exec.Command("ffmpeg", "-version")
+	cmd.Stderr = os.Stderr
+	cmd.Stdout = os.Stdout
+
+	err := cmd.Run()
+	if err != nil {
+		return false
+	}
+	return true
+}
+
 func ffmpeg_merge(videoFile, audioFile, destFile *os.File) error {
-	ffmpegVersionCmd := exec.Command("ffmpeg", "-y",
+	cmd := exec.Command("ffmpeg", "-y",
 		"-i", videoFile.Name(),
 		"-i", audioFile.Name(),
 		"-c", "copy", // copy without re-encoding
@@ -15,10 +27,10 @@ func ffmpeg_merge(videoFile, audioFile, destFile *os.File) error {
 		destFile.Name(),
 		"-loglevel", "warning",
 	)
-	ffmpegVersionCmd.Stderr = os.Stderr
-	ffmpegVersionCmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Stdout = os.Stdout
 
-	err := ffmpegVersionCmd.Run()
+	err := cmd.Run()
 	if err != nil {
 		os.Remove(destFile.Name())
 		return fmt.Errorf("FFmpeg: %s", err.Error())
@@ -27,7 +39,7 @@ func ffmpeg_merge(videoFile, audioFile, destFile *os.File) error {
 }
 
 func ffmpeg_merge_fallback(videoFile, audioFile, destFile *os.File) error {
-	ffmpegVersionCmd := exec.Command("ffmpeg", "-y",
+	cmd := exec.Command("ffmpeg", "-y",
 		"-i", videoFile.Name(),
 		"-i", audioFile.Name(),
 		"-c:v", "copy", // copy without re-encoding
@@ -36,10 +48,10 @@ func ffmpeg_merge_fallback(videoFile, audioFile, destFile *os.File) error {
 		destFile.Name(),
 		"-loglevel", "warning",
 	)
-	ffmpegVersionCmd.Stderr = os.Stderr
-	ffmpegVersionCmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Stdout = os.Stdout
 
-	err := ffmpegVersionCmd.Run()
+	err := cmd.Run()
 	if err != nil {
 		os.Remove(destFile.Name())
 		return fmt.Errorf("FFmpeg: %s", err.Error())

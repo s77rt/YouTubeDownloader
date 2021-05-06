@@ -5,6 +5,8 @@
 *.so
 *.dylib
 
+*.syso
+
 # Test binary, built with `go test -c`
 *.test
 
@@ -12,5 +14,4 @@
 *.out
 
 bin/
-
-*.syso
+cmd/YouTubeDownloader/Downloads/
