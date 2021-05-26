@@ -107,6 +107,8 @@ github.com/kkdai/youtube/v2 v2.6.0 h1:WaP358yBQJEsN5y0L2RpvIM8p7DMKXd23byQhTi3sQ
 github.com/kkdai/youtube/v2 v2.6.0/go.mod h1:AfTdOtGabiMkxNO4JP+NV7HP8hSqfH5/WbHzv1/du0I=
 github.com/kkdai/youtube/v2 v2.6.2-0.20210421221843-0f9b9050684f h1:gXezLjgUrnak1a9cd6Iy9zJ7RoSNESGnpuAJH5WbZ7I=
 github.com/kkdai/youtube/v2 v2.6.2-0.20210421221843-0f9b9050684f/go.mod h1:AfTdOtGabiMkxNO4JP+NV7HP8hSqfH5/WbHzv1/du0I=
+github.com/kkdai/youtube/v2 v2.7.0 h1:AgtSTLcVDtCQlG5/6V4aQCYw/MJ38+fueA44FOriYDM=
+github.com/kkdai/youtube/v2 v2.7.0/go.mod h1:AfTdOtGabiMkxNO4JP+NV7HP8hSqfH5/WbHzv1/du0I=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
 github.com/kr/logfmt v0.0.0-20140226030751-b84e30acd515/go.mod h1:+0opPa2QZZtGFBFZlji/RkVcI2GknAs/DXo4wKdlNEc=
 github.com/kr/pretty v0.1.0 h1:L/CwN0zerZDmRFUapSPitk6f+Q3+0za1rQkzVuMiMFI=

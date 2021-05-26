@@ -2,6 +2,10 @@
 
 All notable changes to this project (YouTubeDownloader) will be documented in this file.
 
+## [0.1.2] - 26/05/2021
+### Fixed:
+ - Unable to download videos due to 404 error (Issue #2)
+
 ## [0.1.1] - 06/05/2021
 ### Fixed:
  - Windows: Unable to play videos due to the improper javascript string escaping
