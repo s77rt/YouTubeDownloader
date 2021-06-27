@@ -2,6 +2,10 @@
 
 All notable changes to this project (YouTubeDownloader) will be documented in this file.
 
+## [0.1.3] - 27/06/2021
+### Changed:
+ - Updated YouTube Extractor (fixes #3)
+
 ## [0.1.2] - 26/05/2021
 ### Fixed:
  - Unable to download videos due to 404 error (Issue #2)
