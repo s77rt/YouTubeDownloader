@@ -23,7 +23,7 @@ clean:
 
 dep:
 	@echo -n "Downloading Dependencies: "
-	@go get -d ./...
+	@go mod tidy
 	@echo "[OK]"
 
 compile:
