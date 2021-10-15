@@ -24,6 +24,7 @@ clean:
 dep:
 	@echo -n "Downloading Dependencies: "
 	@go mod tidy
+	@go install github.com/akavel/rsrc@latest
 	@echo "[OK]"
 
 compile:
