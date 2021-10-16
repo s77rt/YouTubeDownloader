@@ -32,7 +32,7 @@ func (E *Extractor) GetVideoAndFormat(url string) (interface{}, interface{}, err
 		err = errors.New("no formats")
 		return nil, nil, err
 	}
-	format := video.Formats[0]
+	format := &video.Formats[0]
 
 	return video, format, nil
 }
