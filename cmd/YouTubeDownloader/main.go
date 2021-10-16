@@ -3,6 +3,7 @@ package main
 import (
 	"os"
 	"os/signal"
+	"syscall"
 
 	"github.com/s77rt/YouTubeDownloader"
 )
@@ -21,12 +22,12 @@ func main() {
 	YouTubeDownloader.LoadUI(ui, server)
 
 	// Wait until the interrupt signal arrives or browser window is closed
-	sigc := make(chan os.Signal)
-	signal.Notify(sigc, os.Interrupt)
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGQUIT, syscall.SIGTERM)
 	select {
-	case <-sigc:
+	case <-sigs:
 	case <-ui.Done():
 	}
-
 	YouTubeDownloader.Clean()
+	os.Exit(0)
 }

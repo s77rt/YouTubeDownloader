@@ -1,13 +1,14 @@
 package YouTubeDownloader
 
 import (
-	"os"
-	"fmt"
-	"time"
 	"context"
+	"fmt"
+	"os"
 	"path/filepath"
-	E "github.com/s77rt/YouTubeDownloader/extractor"
+	"time"
+
 	D "github.com/s77rt/YouTubeDownloader/downloader"
+	E "github.com/s77rt/YouTubeDownloader/extractor"
 	M "github.com/s77rt/YouTubeDownloader/merger"
 )
 
@@ -54,7 +55,7 @@ func DownloadVideo(ctx context.Context, tmpdir string, extractor E.Extractor, do
 				select {
 				case <-ctx.Done():
 					stop = true
-				case <- done:
+				case <-done:
 					stop = true
 				default:
 					progress_1.Speed = reader.Transferred - progress_1.Transferred
@@ -100,7 +101,7 @@ func DownloadVideo(ctx context.Context, tmpdir string, extractor E.Extractor, do
 				select {
 				case <-ctx.Done():
 					stop = true
-				case <- done:
+				case <-done:
 					stop = true
 				default:
 					progress_1.Speed = reader.Transferred - progress_1.Transferred
@@ -129,7 +130,7 @@ func DownloadVideo(ctx context.Context, tmpdir string, extractor E.Extractor, do
 				select {
 				case <-ctx.Done():
 					stop = true
-				case <- done:
+				case <-done:
 					stop = true
 				default:
 					progress_2.Speed = reader.Transferred - progress_2.Transferred
@@ -164,10 +165,7 @@ func DownloadVideo(ctx context.Context, tmpdir string, extractor E.Extractor, do
 		}
 
 		return file.Name(), nil
-
-	} else {
-		return "", fmt.Errorf("download url not found")
 	}
 
-	return "", fmt.Errorf("unknown error")
+	return "", fmt.Errorf("download url not found")
 }

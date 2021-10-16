@@ -2,6 +2,7 @@ package youtube
 
 import (
 	"context"
+	"errors"
 
 	"github.com/kkdai/youtube/v2"
 )
@@ -18,6 +19,22 @@ func (E *Extractor) GetVideo(url string) (interface{}, error) {
 	video.Formats.Sort()
 
 	return video, nil
+}
+
+func (E *Extractor) GetVideoAndFormat(url string) (interface{}, interface{}, error) {
+	video, err := E.client.GetVideo(url)
+	if err != nil {
+		return nil, nil, err
+	}
+	video.Formats.Sort()
+
+	if len(video.Formats) == 0 {
+		err = errors.New("no formats")
+		return nil, nil, err
+	}
+	format := video.Formats[0]
+
+	return video, format, nil
 }
 
 func (E *Extractor) GetVideos(url string) ([]interface{}, error) {
